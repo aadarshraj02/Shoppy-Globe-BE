@@ -1,9 +1,12 @@
 import express from "express";
 import dotenv from "dotenv";
+import connectDB from "./connection.js";
 
 dotenv.config();
 
 const app = express();
+
+connectDB();
 
 app.use(express.json());
 
