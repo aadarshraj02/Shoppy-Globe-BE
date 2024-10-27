@@ -3,7 +3,7 @@ import Product from "../model/product.js";
 
 const router = express.Router();
 
-router.post("/products", async (req, res) => {
+router.post("/product", async (req, res) => {
   const { title, image, price, description, qty, rating, category, brand } =
     req.body;
 
