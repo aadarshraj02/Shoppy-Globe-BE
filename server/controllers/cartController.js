@@ -1,31 +1,57 @@
 import CartItem from "../model/cart.js";
+import Product from "../model/product.js";
 
-export const addItemToCart = async (req, res) => {
-  const { productId, title, image, price, qty } = req.body;
+export const addCartItem = async (req, res) => {
+  const { productId, qty } = req.body;
   const userId = req.user.id;
 
+  if (!productId || !qty) {
+    return res
+      .status(400)
+      .json({ message: "Product ID and quantity are required." });
+  }
+
+  if (qty <= 0) {
+    return res
+      .status(400)
+      .json({ message: "Quantity must be greater than zero." });
+  }
+
   try {
-    const newItem = new CartItem({
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const existingCartItem = await CartItem.findOne({ userId, productId });
+    if (existingCartItem) {
+      return res
+        .status(400)
+        .json({ message: "Item already in cart. Please update the quantity." });
+    }
+
+    const newCartItem = new CartItem({
       userId,
-      productId,
-      title,
-      image,
-      price,
+      productId: product._id,
+      title: product.title,
+      image: product.image,
+      price: product.price,
       qty,
     });
-    await newItem.save();
+
+    await newCartItem.save();
     res
       .status(201)
-      .json({ message: "Item added to cart successfully", newItem });
+      .json({ message: "Item added to cart successfully", newCartItem });
   } catch (error) {
-    res
+    return res
       .status(500)
       .json({ message: "Error adding item to cart", error: error.message });
   }
 };
 
 export const getUserCart = async (req, res) => {
-  const userId = req.user.id; 
+  const userId = req.user.id;
 
   try {
     const cartItems = await CartItem.find({ userId });
@@ -38,8 +64,8 @@ export const getUserCart = async (req, res) => {
 };
 
 export const updateCartItem = async (req, res) => {
-  const { id } = req.params; 
-  const { qty } = req.body; 
+  const { id } = req.params;
+  const { qty } = req.body;
 
   try {
     const updatedItem = await CartItem.findByIdAndUpdate(
@@ -61,7 +87,7 @@ export const updateCartItem = async (req, res) => {
 };
 
 export const removeCartItem = async (req, res) => {
-  const { id } = req.params; 
+  const { id } = req.params;
 
   try {
     const deletedItem = await CartItem.findByIdAndDelete(id);
