@@ -1,6 +1,7 @@
 import CartItem from "../model/cart.js";
 import Product from "../model/product.js";
 
+//add items to cart(add using id then fetch title qty image and price)
 export const addCartItem = async (req, res) => {
   const { productId, qty } = req.body;
   const userId = req.user.id;
@@ -50,6 +51,7 @@ export const addCartItem = async (req, res) => {
   }
 };
 
+//get items from user cart using user id
 export const getUserCart = async (req, res) => {
   const userId = req.user.id;
 
@@ -63,6 +65,7 @@ export const getUserCart = async (req, res) => {
   }
 };
 
+//update quantity in cart item
 export const updateCartItem = async (req, res) => {
   const { id } = req.params;
   const { qty } = req.body;
@@ -86,6 +89,7 @@ export const updateCartItem = async (req, res) => {
   }
 };
 
+//delete items from cart using id
 export const removeCartItem = async (req, res) => {
   const { id } = req.params;
 

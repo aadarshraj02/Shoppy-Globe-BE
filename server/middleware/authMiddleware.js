@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 
+//auth middleware for verify jwt token and then if valid add item to cart
 export const authenticateUser = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) {

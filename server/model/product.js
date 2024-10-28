@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+//product schema for adding product with validation
 const productSchema = new mongoose.Schema({
   title: {
     type: String,

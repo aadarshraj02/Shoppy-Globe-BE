@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+//cart model containing user id(for specific user cart) product id title image etc
 const cartItemSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
