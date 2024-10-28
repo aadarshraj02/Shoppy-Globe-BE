@@ -12,7 +12,6 @@ export const registerUser = async (req, res) => {
         .json({ message: "User already exists, please login." });
     }
 
-    // Directly create a new user without hashing the password for testing
     const newUser = new User({ username, email, password });
     await newUser.save();
     res.status(201).json({ message: "User registered successfully" });
